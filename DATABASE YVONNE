@@ -1,0 +1,102 @@
+
+
+CREATE TABLE Users (
+ user_id INT AUTO_INCREMENT PRIMARY KEY,
+ firstname VARCHAR(50),
+ lastname VARCHAR(50),
+ username VARCHAR(50) UNIQUE,
+ email VARCHAR(100) UNIQUE,
+ telephone VARCHAR(20),
+ password VARCHAR(100),
+ creationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ activation_code VARCHAR(50),
+ is_activated BOOLEAN DEFAULT FALSE
+);
+
+-- Advisors Table
+CREATE TABLE Advisors (
+    advisor_id INT AUTO_INCREMENT PRIMARY KEY,
+    advisor_name VARCHAR(100) NOT NULL,
+    specialization VARCHAR(100),
+    contact_number VARCHAR(20),
+);
+
+-- Recommendations Table
+CREATE TABLE Recommendations (
+    recommendation_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    advisor_id INT,
+    recommendation_text TEXT,
+    recommendation_date DATE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (advisor_id) REFERENCES Advisors(advisor_id)
+);
+
+-- Transaction Table
+CREATE TABLE Transactions (
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    transaction_type VARCHAR(50),
+    amount DECIMAL(10, 2),
+    transaction_date DATE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Clients Table
+CREATE TABLE Clients (
+    client_id INT AUTO_INCREMENT PRIMARY KEY,
+    client_name VARCHAR(100) NOT NULL,
+    advisor_id INT,
+    contact_number VARCHAR(20),
+    email VARCHAR(100),
+    FOREIGN KEY (advisor_id) REFERENCES Advisors(advisor_id)
+);
+
+-- Investment Products Table
+CREATE TABLE InvestmentProducts (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    category VARCHAR(50),
+    description TEXT,
+    price DECIMAL(10, 2)
+);
+
+-- News Articles Table
+CREATE TABLE NewsArticles (
+    article_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    author VARCHAR(100),
+    publication_date DATE,
+    content TEXT
+);
+
+-- Comments Table
+CREATE TABLE Comments (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    comment_text TEXT,
+    comment_date DATE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (article_id) REFERENCES NewsArticles(article_id)
+);
+
+-- Analytics Table
+CREATE TABLE Analytics (
+    analytics_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    page_visited VARCHAR(100),
+    visit_date DATE,
+    time_spent INT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Watchlist Table
+CREATE TABLE Watchlist (
+    watchlist_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+    added_date DATE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (product_id) REFERENCES InvestmentProducts(product_id)
+);
